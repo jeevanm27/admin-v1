@@ -16,13 +16,26 @@ public class Organization {
 
     @Id
     @JsonIgnore
-    private String _id;
+    private String id;
 
     @Indexed(unique = true)
     @Field("org_id")
     @JsonProperty("org_id")
-    private String org_id = UUID.randomUUID().toString();
+    private String orgId = UUID.randomUUID().toString();
 
-    @JsonProperty("organizationName")
-    private String OrganizationName;
+    @Field("organization_name")
+    @JsonProperty("organization_name")
+    private String organizationName;
+
+    @Field("organization_address")
+    @JsonProperty("organization_address")
+    private String organizationAddress;
+
+    @Field("phone")
+    @JsonProperty("phone")
+    private String phone;
+
+    @Field("is_enabled")
+    @JsonProperty("is_enabled")
+    private boolean enabled;
 }

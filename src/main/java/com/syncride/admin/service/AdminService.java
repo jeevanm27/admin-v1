@@ -83,7 +83,7 @@ public class AdminService {
             Optional<Organization> existing = organizationRepository.findByOrgId(orgId);
             if (existing.isEmpty()) {
                 Organization org = new Organization();
-                org.setOrg_id(orgId);
+                org.setOrgId(orgId);
                 org.setOrganizationName(username + "'s Organization");
                 organizationRepository.save(org);
                 log.info("Created new organization record for org_id: {}", orgId);
