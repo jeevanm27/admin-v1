@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/organizations")
@@ -18,15 +19,13 @@ public class OrganizationController {
 
     private final OrganizationService service;
 
-
-
     @PostMapping
     @PreAuthorize("hasRole('SYSTEMADMIN')")
-    public ResponseEntity<Map<String,Object>> create(@RequestBody OrganizationDTO dto){
+    public ResponseEntity<Map<String, Object>> create(@RequestBody OrganizationDTO dto) {
 
-        Map<String,Object> response = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
 
-        try{
+        try {
             OrganizationDTO created = service.create(dto);
             response.put("success", true);
             response.put("message", "Organization created");
@@ -34,7 +33,7 @@ public class OrganizationController {
 
             return ResponseEntity.status(201).body(response);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             response.put("success", false);
             response.put("message", e.getMessage());
 
@@ -42,22 +41,27 @@ public class OrganizationController {
         }
     }
 
-
-
     @PreAuthorize("hasRole('SYSTEMADMIN')")
     @GetMapping("/{orgId}")
-    public ResponseEntity<Map<String,Object>> get(@PathVariable String orgId){
+    public ResponseEntity<Map<String, Object>> get(@PathVariable String orgId) {
 
-        Map<String,Object> response = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
 
-        try{
+        try {
             OrganizationDTO dto = service.getByOrgId(orgId);
+
+            if (!dto.isEnabled()) {
+                response.put("success", false);
+                response.put("message", "Organization is disabled.");
+                return ResponseEntity.status(403).body(response);
+            }
+
             response.put("success", true);
             response.put("data", dto);
 
             return ResponseEntity.ok(response);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             response.put("success", false);
             response.put("message", e.getMessage());
 
@@ -67,9 +71,9 @@ public class OrganizationController {
 
     @PreAuthorize("hasRole('SYSTEMADMIN')")
     @GetMapping
-    public ResponseEntity<Map<String,Object>> list(){
+    public ResponseEntity<Map<String, Object>> list() {
 
-        Map<String,Object> response = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
 
         List<OrganizationDTO> list = service.getAll();
 
@@ -81,20 +85,20 @@ public class OrganizationController {
 
     @PreAuthorize("hasRole('SYSTEMADMIN')")
     @PutMapping("/{orgId}")
-    public ResponseEntity<Map<String,Object>> update(@PathVariable String orgId,
-                                                     @RequestBody OrganizationDTO dto){
+    public ResponseEntity<Map<String, Object>> update(@PathVariable String orgId,
+            @RequestBody OrganizationDTO dto) {
 
-        Map<String,Object> response = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
 
-        try{
-            OrganizationDTO updated = service.update(orgId,dto);
+        try {
+            OrganizationDTO updated = service.update(orgId, dto);
             response.put("success", true);
             response.put("message", "Organization updated");
             response.put("data", updated);
 
             return ResponseEntity.ok(response);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             response.put("success", false);
             response.put("message", e.getMessage());
 
@@ -104,18 +108,18 @@ public class OrganizationController {
 
     @PreAuthorize("hasRole('SYSTEMADMIN')")
     @DeleteMapping("/{orgId}")
-    public ResponseEntity<Map<String,Object>> delete(@PathVariable String orgId){
+    public ResponseEntity<Map<String, Object>> delete(@PathVariable String orgId) {
 
-        Map<String,Object> response = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
 
-        try{
+        try {
             service.delete(orgId);
             response.put("success", true);
             response.put("message", "Organization deleted");
 
             return ResponseEntity.ok(response);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             response.put("success", false);
             response.put("message", e.getMessage());
 

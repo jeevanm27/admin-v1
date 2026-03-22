@@ -37,5 +37,5 @@ public class Organization {
 
     @Field("is_enabled")
     @JsonProperty("is_enabled")
-    private boolean enabled;
+    private boolean enabled = true;
 }
