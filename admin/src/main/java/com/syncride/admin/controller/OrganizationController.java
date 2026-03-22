@@ -4,6 +4,7 @@ import com.syncride.admin.dto.OrganizationDTO;
 import com.syncride.admin.service.OrganizationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -17,7 +18,10 @@ public class OrganizationController {
 
     private final OrganizationService service;
 
+
+
     @PostMapping
+    @PreAuthorize("hasRole('SYSTEMADMIN')")
     public ResponseEntity<Map<String,Object>> create(@RequestBody OrganizationDTO dto){
 
         Map<String,Object> response = new HashMap<>();
@@ -40,6 +44,7 @@ public class OrganizationController {
 
 
 
+    @PreAuthorize("hasRole('SYSTEMADMIN')")
     @GetMapping("/{orgId}")
     public ResponseEntity<Map<String,Object>> get(@PathVariable String orgId){
 
@@ -60,6 +65,7 @@ public class OrganizationController {
         }
     }
 
+    @PreAuthorize("hasRole('SYSTEMADMIN')")
     @GetMapping
     public ResponseEntity<Map<String,Object>> list(){
 
@@ -73,6 +79,7 @@ public class OrganizationController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasRole('SYSTEMADMIN')")
     @PutMapping("/{orgId}")
     public ResponseEntity<Map<String,Object>> update(@PathVariable String orgId,
                                                      @RequestBody OrganizationDTO dto){
@@ -95,6 +102,7 @@ public class OrganizationController {
         }
     }
 
+    @PreAuthorize("hasRole('SYSTEMADMIN')")
     @DeleteMapping("/{orgId}")
     public ResponseEntity<Map<String,Object>> delete(@PathVariable String orgId){
 
