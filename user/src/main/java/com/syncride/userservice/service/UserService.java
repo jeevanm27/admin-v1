@@ -629,54 +629,134 @@ public class UserService {
         }
     }
 
-//    // ADD ADMIN — called by admin-service to register an admin/superadmin user
-//    public ApiResponse<?> addAdmin(String phone, String username, String fcmToken,
-//            String gender, String role, String orgId) {
-//
-//        // Validate role
-//        if (!"admin".equalsIgnoreCase(role) && !"superadmin".equalsIgnoreCase(role)) {
-//            return ApiResponse.error("Role must be 'admin' or 'superadmin'.");
-//        }
-//
-//        // Validate org_id
-//        if (orgId == "" || orgId.isBlank()) {
-//            return ApiResponse.error("org_id is required for admin/superadmin.");
-//        }
-//
-//        // Validate required fields
-//        if (phone == null || phone.isBlank() ||
-//                username == null || username.isBlank() ||
-//                fcmToken == null || fcmToken.isBlank() ||
-//                gender == null || gender.isBlank()) {
-//            return ApiResponse.error("Details are missing. Fill all fields.");
-//        }
-//
-//        try {
-//            if (userRepository.findByPhone(phone).isPresent()) {
-//                return ApiResponse.error("User already exists for this phone number.");
-//            }
-//
-//            User user = new User();
-//            user.setPhone(phone);
-//            user.setName(username);
-//            user.setFcmToken(fcmToken);
-//            user.setGender(gender);
-//            user.setRole(role.toLowerCase());
-//            user.setOrgId();
-//            user.setCreatedBy(role.toLowerCase());
-//
-//            Date now = new Date();
-//            user.setCreatedAt(now);
-//            user.setUpdatedAt(now);
-//
-//            userRepository.save(user);
-//
-//            return ApiResponse.success("Admin user created successfully.",
-//                    Map.of("id", user.getId(), "role", user.getRole()));
-//
-//        } catch (Exception e) {
-//            return ApiResponse.error("Failed to create admin: " + e.getMessage());
-//        }
-//    }
+    // only by superadmin — creates an admin user
+   public ApiResponse<?> createAdmin(String phone, String username, String fcmToken,
+           String gender, String role, String orgId) {
 
+       if (!"admin".equalsIgnoreCase(role)) {
+           return ApiResponse.error("Role must be 'admin'.");
+       }
+
+       if (orgId == null || orgId.isBlank()) {
+           return ApiResponse.error("org_id is required for admin.");
+       }
+
+       if (phone == null || phone.isBlank() ||
+               username == null || username.isBlank() ||
+               fcmToken == null || fcmToken.isBlank() ||
+               gender == null || gender.isBlank()) {
+           return ApiResponse.error("Details are missing. Fill all fields.");
+       }
+
+       try {
+           if (userRepository.findByPhone(phone).isPresent()) {
+               return ApiResponse.error("User already exists for this phone number.");
+           }
+
+           User user = new User();
+           user.setPhone(phone);
+           user.setName(username);
+           user.setFcmToken(fcmToken);
+           user.setGender(gender);
+           user.setRole(role.toLowerCase());
+           user.setOrgId(orgId);
+           user.setCreatedBy("superadmin");
+
+           Date now = new Date();
+           user.setCreatedAt(now);
+           user.setUpdatedAt(now);
+
+           userRepository.save(user);
+
+           return ApiResponse.success("Admin user created successfully.",
+                   Map.of("id", user.getId(), "role", user.getRole()));
+
+       } catch (Exception e) {
+           return ApiResponse.error("Failed to create admin: " + e.getMessage());
+       }
+   }
+
+
+    // only by system admin — creates a superadmin user
+    public ApiResponse<?> createSuperadmin(String phone, String username, String fcmToken,
+                                   String gender, String role, String orgId) {
+
+        if (!"superadmin".equalsIgnoreCase(role)) {
+            return ApiResponse.error("Role must be 'superadmin'.");
+        }
+
+        if (orgId == null || orgId.isBlank()) {
+            return ApiResponse.error("org_id is required for superadmin.");
+        }
+
+        if (phone == null || phone.isBlank() ||
+                username == null || username.isBlank() ||
+                fcmToken == null || fcmToken.isBlank() ||
+                gender == null || gender.isBlank()) {
+            return ApiResponse.error("Details are missing. Fill all fields.");
+        }
+
+        try {
+            if (userRepository.findByPhone(phone).isPresent()) {
+                return ApiResponse.error("User already exists for this phone number.");
+            }
+
+            User user = new User();
+            user.setPhone(phone);
+            user.setName(username);
+            user.setFcmToken(fcmToken);
+            user.setGender(gender);
+            user.setRole(role.toLowerCase());
+            user.setOrgId(orgId);
+            user.setCreatedBy("system_admin");
+
+            Date now = new Date();
+            user.setCreatedAt(now);
+            user.setUpdatedAt(now);
+
+            userRepository.save(user);
+
+            return ApiResponse.success("Superadmin user created successfully.",
+                    Map.of("id", user.getId(), "role", user.getRole()));
+
+        } catch (Exception e) {
+            return ApiResponse.error("Failed to create superadmin: " + e.getMessage());
+        }
+    }
+
+    public ApiResponse<?> getSuperadmins() {
+
+        List<User> users = userRepository.findByRole("superadmin");
+
+        if (users.isEmpty()) {
+            return ApiResponse.error("No Super admins");
+        }
+
+        return ApiResponse.success(users);
+    }
+
+    public ApiResponse<?> getAdmins() {
+        List<User> users = userRepository.findByRole("admin");
+
+        if (users.isEmpty()) {
+            return ApiResponse.error("No admins found");
+        }
+
+        return ApiResponse.success(users);
+    }
+
+    public ApiResponse<?> getAdminsByOrgId(String orgId) {
+
+        if (orgId == null || orgId.isBlank()) {
+            return ApiResponse.error("org_id is required.");
+        }
+
+        List<User> users = userRepository.findByOrgIdAndRole(orgId, "admin");
+
+        if (users.isEmpty()) {
+            return ApiResponse.error("No admins found for the given org_id.");
+        }
+
+        return ApiResponse.success(users);
+    }
 }

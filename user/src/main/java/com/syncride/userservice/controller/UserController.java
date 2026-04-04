@@ -1,11 +1,13 @@
 package com.syncride.userservice.controller;
 
+import com.cloudinary.Api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.syncride.userservice.dto.ApiResponse;
 import com.syncride.userservice.model.User;
 import com.syncride.userservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -370,22 +372,73 @@ public class UserController {
                                 .body(response);
         }
 
-//        // Called by admin-service to register an admin or superadmin user
-//        @PostMapping("/add-admin")
-//        public ResponseEntity<ApiResponse<?>> addAdmin(
-//                        @RequestBody Map<String, String> body) {
-//
-//                ApiResponse<?> response = userService.addAdmin(
-//                                body.get("phone"),
-//                                body.get("username"),
-//                                body.get("fcmToken"),
-//                                body.get("gender"),
-//                                body.get("role"),
-//                                body.get("org_id"));
-//
-//                return ResponseEntity
-//                                .status(response.isSuccess() ? 200 : 400)
-//                                .body(response);
-//        }
+        @PreAuthorize("hasRole('SYSTEM_ADMIN')")
+        @PostMapping("/create-superadmin")
+        public ResponseEntity<ApiResponse<?>> createSuperadmin(
+                        @RequestBody Map<String, String> body) {
+
+                ApiResponse<?> response = userService.createSuperadmin(
+                                body.get("phone"),
+                                body.get("username"),
+                                body.get("fcmToken"),
+                                body.get("gender"),
+                                body.get("role"),
+                                body.get("org_id"));
+
+                return ResponseEntity
+                                .status(response.isSuccess() ? 200 : 400)
+                                .body(response);
+        }
+
+        @PreAuthorize("hasRole('SUPER_ADMIN')")
+        @PostMapping("/create-admin")
+        public ResponseEntity<ApiResponse<?>> createAdmin(
+                        @RequestBody Map<String, String> body) {
+
+                ApiResponse<?> response = userService.createAdmin(
+                                body.get("phone"),
+                                body.get("username"),
+                                body.get("fcmToken"),
+                                body.get("gender"),
+                                body.get("role"),
+                                body.get("org_id"));
+
+                return ResponseEntity
+                                .status(response.isSuccess() ? 200 : 400)
+                                .body(response);
+        }
+
+        @PreAuthorize("hasRole('SYSTEM_ADMIN')")
+        @GetMapping("/get-superadmins")
+        public ResponseEntity<ApiResponse<?>> getSuperadmins() {
+
+                ApiResponse<?> response = userService.getSuperadmins();
+
+                return ResponseEntity
+                                .status(response.isSuccess() ? 200 : 400)
+                                .body(response);
+        }
+
+        @PreAuthorize("hasRole('SYSTEM_ADMIN')")
+        @GetMapping("/get-admins")
+        public ResponseEntity<ApiResponse<?>> getAdmins() {
+
+                ApiResponse<?> response = userService.getAdmins();
+
+                return ResponseEntity
+                                .status(response.isSuccess() ? 200 : 400)
+                                .body(response);
+        }
+
+        @PreAuthorize("hasRole('SYSTEM_ADMIN')")
+        @GetMapping("/get-admins-by-org")
+        public ResponseEntity<ApiResponse<?>> getAdminsByOrg(@RequestParam String orgId) {
+
+                ApiResponse<?> response = userService.getAdminsByOrgId(orgId);
+
+                return ResponseEntity
+                                .status(response.isSuccess() ? 200 : 400)
+                                .body(response);
+        }
 
 }

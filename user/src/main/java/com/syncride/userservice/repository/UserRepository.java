@@ -15,4 +15,8 @@ public interface UserRepository extends MongoRepository<User, String> {
     List<User> findByIsDriverTrueAndDriverStatus(String driverStatus);
 
     List<User> findByOrgId(String orgId);
+
+    List<User> findByRole(String role);
+
+    List<User> findByOrgIdAndRole(String orgId, String role);
 }
