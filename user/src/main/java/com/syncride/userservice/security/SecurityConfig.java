@@ -35,16 +35,15 @@ public class SecurityConfig {
                                 "/api/get-drivers", "/api/get-specific-drivers", "/api/set-driver-status",
                                 "/api/update-request-complete-ride", "/api/update-request-confirmed-ride",
                                 "/api/update-request-cancel-ride", "/api/update-ride-history",
-                                "/api/update-schedule-ride-history", "/api/upload-documents", "/api/ping")
-                        .permitAll() // Public
-                        .requestMatchers("/api/logout", "/api/get-user-history", "/api/update-location",
+                                "/api/update-schedule-ride-history", "/api/upload-documents", "/api/ping","/api/logout", "/api/get-user-history", "/api/update-location",
                                 "/api/get-profile")
-                        .hasAnyRole("DRIVER", "USER")
+                        .permitAll() // Public
+
                         .requestMatchers("/api/create-admin")
                         .hasRole("SUPER_ADMIN")
                         .requestMatchers("/api/create-superadmin", "/api/get-superadmins",
                                 "/api/get-admins", "/api/get-admins-by-org")
-                        .hasRole("SYSTEM_ADMIN")
+                        .hasAnyRole("SYSTEM_ADMIN", "SUPER_ADMIN")
                         .anyRequest().authenticated())
 
                 // 4. Add your custom filter before the standard auth filter
