@@ -732,7 +732,10 @@ public class UserService {
             return ApiResponse.error("No Super admins");
         }
 
-        return ApiResponse.success(users);
+        Map<String, Object> data = new HashMap<>();
+        data.put("users", users);
+
+        return ApiResponse.success("success",data);
     }
 
     public ApiResponse<?> getAdmins() {
@@ -742,7 +745,10 @@ public class UserService {
             return ApiResponse.error("No admins found");
         }
 
-        return ApiResponse.success(users);
+        Map<String, Object> data = new HashMap<>();
+        data.put("users", users);
+
+        return ApiResponse.success("success",data);
     }
 
     public ApiResponse<?> getAdminsByOrgId(String orgId) {
@@ -757,6 +763,9 @@ public class UserService {
             return ApiResponse.error("No admins found for the given org_id.");
         }
 
-        return ApiResponse.success(users);
+        Map<String, Object> data = new HashMap<>();
+        data.put("users", users);
+
+        return ApiResponse.success("success",data);
     }
 }
