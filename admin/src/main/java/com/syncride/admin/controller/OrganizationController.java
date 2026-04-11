@@ -20,7 +20,7 @@ public class OrganizationController {
     private final OrganizationService service;
 
     @PostMapping
-    @PreAuthorize("hasRole('SYSTEMADMIN')")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN', 'SUPER_ADMIN')")
     public ResponseEntity<Map<String, Object>> create(@RequestBody OrganizationDTO dto) {
 
         Map<String, Object> response = new HashMap<>();
@@ -41,7 +41,7 @@ public class OrganizationController {
         }
     }
 
-    @PreAuthorize("hasRole('SYSTEMADMIN')")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN', 'SUPER_ADMIN')")
     @GetMapping("/{orgId}")
     public ResponseEntity<Map<String, Object>> get(@PathVariable String orgId) {
 
@@ -69,7 +69,7 @@ public class OrganizationController {
         }
     }
 
-    @PreAuthorize("hasRole('SYSTEMADMIN')")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN', 'SUPER_ADMIN')")
     @GetMapping
     public ResponseEntity<Map<String, Object>> list() {
 
@@ -83,7 +83,7 @@ public class OrganizationController {
         return ResponseEntity.ok(response);
     }
 
-    @PreAuthorize("hasRole('SYSTEMADMIN')")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN', 'SUPER_ADMIN')")
     @PutMapping("/{orgId}")
     public ResponseEntity<Map<String, Object>> update(@PathVariable String orgId,
             @RequestBody OrganizationDTO dto) {
@@ -106,7 +106,7 @@ public class OrganizationController {
         }
     }
 
-    @PreAuthorize("hasRole('SYSTEMADMIN')")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN', 'SUPER_ADMIN')")
     @DeleteMapping("/{orgId}")
     public ResponseEntity<Map<String, Object>> delete(@PathVariable String orgId) {
 

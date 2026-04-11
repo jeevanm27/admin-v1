@@ -20,19 +20,5 @@ public class AdminController {
     }
 
 
-    @PostMapping("/create-admin")
-    public ResponseEntity<Map<String, Object>> createAdmin(
-            @RequestBody Map<String, String> body) {
-
-        Map<String, Object> response = adminService.createAdmin(
-                body.get("phone"),
-                body.get("username"),
-                body.get("fcmToken"),
-                body.get("gender"),
-                body.get("role"),
-                body.get("org_id"));
-
-        boolean success = Boolean.TRUE.equals(response.get("success"));
-        return ResponseEntity.status(success ? 200 : 400).body(response);
-    }
+  
 }

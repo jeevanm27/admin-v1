@@ -3,6 +3,7 @@ package com.syncride.admin.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -11,6 +12,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -27,7 +29,8 @@ public class SecurityConfig {
 
                 // 3. Define authorization rules
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/**").permitAll() // Public
+                        .requestMatchers("/api/ping").permitAll()
+                        .requestMatchers("/api/organizations/**").hasAnyRole("SYSTEM_ADMIN", "SUPER_ADMIN")
 
                         .anyRequest().authenticated())
 
