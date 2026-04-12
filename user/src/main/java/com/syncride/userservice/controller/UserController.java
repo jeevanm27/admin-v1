@@ -441,4 +441,15 @@ public class UserController {
                                 .body(response);
         }
 
+        @PreAuthorize("hasAnyRole('SYSTEM_ADMIN', 'SUPER_ADMIN')")
+        @DeleteMapping("/delete-user/{id}")
+        public ResponseEntity<ApiResponse<?>> deleteUser(@PathVariable String id) {
+
+                ApiResponse<?> response = userService.deleteUserById(id);
+
+                return ResponseEntity
+                                .status(response.isSuccess() ? 200 : 400)
+                                .body(response);
+        }
+
 }

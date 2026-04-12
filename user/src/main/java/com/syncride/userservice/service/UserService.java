@@ -768,4 +768,24 @@ public class UserService {
 
         return ApiResponse.success("success",data);
     }
+
+    public ApiResponse<?> deleteUserById(String id) {
+
+        if (id == null || id.isBlank()) {
+            return ApiResponse.error("id is required.");
+        }
+
+        Optional<User> optionalUser = userRepository.findByIdEquals(id);
+
+        if (optionalUser.isEmpty()) {
+            return ApiResponse.error("User not found");
+        }
+
+        User user = optionalUser.get();
+
+        userRepository.delete(user);
+
+        return ApiResponse.success("User deleted successfully",
+                Map.of("id", id));
+    }
 }

@@ -42,7 +42,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/create-admin")
                         .hasRole("SUPER_ADMIN")
                         .requestMatchers("/api/create-superadmin", "/api/get-superadmins",
-                                "/api/get-admins", "/api/get-admins-by-org")
+                                "/api/get-admins", "/api/get-admins-by-org", "/api/delete-user/**")
                         .hasAnyRole("SYSTEM_ADMIN", "SUPER_ADMIN")
                         .anyRequest().authenticated())
 
