@@ -372,7 +372,7 @@ public class UserController {
                                 .body(response);
         }
 
-        @PreAuthorize("hasRole('SYSTEM_ADMIN')")
+        
         @PostMapping("/create-superadmin")
         public ResponseEntity<ApiResponse<?>> createSuperadmin(
                         @RequestBody Map<String, String> body) {
@@ -390,7 +390,7 @@ public class UserController {
                                 .body(response);
         }
 
-        @PreAuthorize("hasRole('SUPER_ADMIN')")
+        
         @PostMapping("/create-admin")
         public ResponseEntity<ApiResponse<?>> createAdmin(
                         @RequestBody Map<String, String> body) {
@@ -408,7 +408,7 @@ public class UserController {
                                 .body(response);
         }
 
-        @PreAuthorize("hasRole('SYSTEM_ADMIN')")
+        
         @GetMapping("/get-superadmins")
         public ResponseEntity<ApiResponse<?>> getSuperadmins() {
 
@@ -419,7 +419,7 @@ public class UserController {
                                 .body(response);
         }
 
-        @PreAuthorize("hasRole('SYSTEM_ADMIN')")
+        
         @GetMapping("/get-admins")
         public ResponseEntity<ApiResponse<?>> getAdmins() {
 
@@ -430,7 +430,7 @@ public class UserController {
                                 .body(response);
         }
 
-        @PreAuthorize("hasRole('SYSTEM_ADMIN')")
+        
         @GetMapping("/get-admins-by-org")
         public ResponseEntity<ApiResponse<?>> getAdminsByOrg(@RequestParam String orgId) {
 
@@ -441,7 +441,7 @@ public class UserController {
                                 .body(response);
         }
 
-        @PreAuthorize("hasAnyRole('SYSTEM_ADMIN', 'SUPER_ADMIN')")
+        
         @DeleteMapping("/delete-user/{id}")
         public ResponseEntity<ApiResponse<?>> deleteUser(@PathVariable String id) {
 

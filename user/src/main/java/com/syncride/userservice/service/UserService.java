@@ -633,9 +633,7 @@ public class UserService {
    public ApiResponse<?> createAdmin(String phone, String username, String fcmToken,
            String gender, String role, String orgId) {
 
-       if (!"admin".equalsIgnoreCase(role)) {
-           return ApiResponse.error("Role must be 'admin'.");
-       }
+      
 
        if (orgId == null || orgId.isBlank()) {
            return ApiResponse.error("org_id is required for admin.");
@@ -681,9 +679,7 @@ public class UserService {
     public ApiResponse<?> createSuperadmin(String phone, String username, String fcmToken,
                                    String gender, String role, String orgId) {
 
-        if (!"superadmin".equalsIgnoreCase(role)) {
-            return ApiResponse.error("Role must be 'superadmin'.");
-        }
+       
 
         if (orgId == null || orgId.isBlank()) {
             return ApiResponse.error("org_id is required for superadmin.");
@@ -726,7 +722,7 @@ public class UserService {
 
     public ApiResponse<?> getSuperadmins() {
 
-        List<User> users = userRepository.findByRole("superadmin");
+        List<User> users = userRepository.findByRole("super_admin");
 
         if (users.isEmpty()) {
             return ApiResponse.error("No Super admins");
